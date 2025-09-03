@@ -1,0 +1,95 @@
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if(targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if(targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+            
+            // Close mobile menu if open
+            if(document.querySelector('.nav-links').classList.contains('active')) {
+                toggleMenu();
+            }
+        }
+    });
+});
+
+// Mobile menu toggle
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('.nav-links');
+
+function toggleMenu() {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+}
+
+hamburger.addEventListener('click', toggleMenu);
+
+// Animation on scroll
+const animateOnScroll = () => {
+    const skills = document.querySelectorAll('.skill');
+    const projects = document.querySelectorAll('.project');
+    
+    skills.forEach(skill => {
+        const position = skill.getBoundingClientRect();
+        
+        // If element is in viewport
+        if(position.top < window.innerHeight - 100) {
+            skill.classList.add('show');
+        }
+    });
+    
+    projects.forEach(project => {
+        const position = project.getBoundingClientRect();
+        
+        // If element is in viewport
+        if(position.top < window.innerHeight - 100) {
+            project.classList.add('show');
+        }
+    });
+};
+
+// Listen for scroll events
+window.addEventListener('scroll', animateOnScroll);
+// Trigger once on load
+window.addEventListener('load', animateOnScroll);
+
+// Form submission
+const contactForm = document.getElementById('contactForm');
+if(contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your message! I will get back to you soon.');
+        this.reset();
+    });
+}
+
+// Create additional floating flowers
+function createFloatingFlowers() {
+    const floatingContainer = document.querySelector('.floating-flowers');
+    const flowerSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15,9 a6,6 0 1,1 0,12 a6,6 0 1,1 0,-12' fill='%23ff4d8d' /%3E%3Ccircle cx='15' cy='9' r='2' fill='%239c27b0' /%3E%3Ccircle cx='20' cy='14' r='2' fill='%239c27b0' /%3E%3Ccircle cx='10' cy='14' r='2' fill='%239c27b0' /%3E%3C/svg%3E";
+    
+    for (let i = 0; i < 5; i++) {
+        const flower = document.createElement('div');
+        flower.style.position = 'absolute';
+        flower.style.width = '30px';
+        flower.style.height = '30px';
+        flower.style.backgroundImage = `url("${flowerSvg}")`;
+        flower.style.animation = `float ${15 + Math.random() * 10}s linear infinite`;
+        flower.style.animationDelay = `${Math.random() * 10}s`;
+        flower.style.top = `${Math.random() * 100}%`;
+        flower.style.left = `${Math.random() * 100}%`;
+        
+        floatingContainer.appendChild(flower);
+    }
+}
+
+// Initialize floating flowers
+createFloatingFlowers();
