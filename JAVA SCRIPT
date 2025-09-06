@@ -1,0 +1,78 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatInput = document.querySelector('.chat-input input');
+    const chatButton = document.querySelector('.chat-input button');
+    
+    // Sample responses for the chatbot
+    const responses = {
+        'hello': 'Hello! How can I assist with your studies today?',
+        'hi': 'Hi there! What can I help you with?',
+        'course': 'I can help you with course information. Which course are you inquiring about?',
+        'schedule': 'You can check your class schedule through the student portal. Would you like me to explain how?',
+        'library': 'The library is open from 8 AM to 10 PM on weekdays and 10 AM to 6 PM on weekends.',
+        'deadline': 'Assignment deadlines are usually available on the course portal. Do you need help finding them?',
+        'professor': 'You can contact professors via email during their office hours. Would you like me to help you find their contact information?',
+        'thanks': 'You\'re welcome! Let me know if you need anything else.',
+        'help': 'I can help with course information, schedules, deadlines, professor contacts, and library resources. What do you need?',
+        'assignment': 'Assignments are typically submitted through the online learning platform. Have you checked there?',
+        'exam': 'Exam schedules are usually posted by the registrar\'s office. Would you like me to help you find them?',
+        'campus': 'The campus map is available on the university website. Is there a specific location you\'re looking for?',
+        'default': 'I\'m not sure I understand. Could you please rephrase your question? I\'m here to help with course information, schedules, deadlines, and other student queries.'
+    };
+    
+    // Function to add a message to the chat
+    function addMessage(text, isUser) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+        messageDiv.textContent = text;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Function to generate bot response
+    function getBotResponse(input) {
+        input = input.toLowerCase();
+        
+        for (const keyword in responses) {
+            if (input.includes(keyword)) {
+                return responses[keyword];
+            }
+        }
+        
+        return responses['default'];
+    }
+    
+    // Event listener for send button
+    chatButton.addEventListener('click', function() {
+        const message = chatInput.value.trim();
+        
+        if (message) {
+            addMessage(message, true);
+            chatInput.value = '';
+            
+            // Bot response after a short delay
+            setTimeout(function() {
+                const response = getBotResponse(message);
+                addMessage(response, false);
+            }, 1000);
+        }
+    });
+    
+    // Event listener for Enter key
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            chatButton.click();
+        }
+    });
+    
+    // Add some sample conversation after page loads
+    setTimeout(function() {
+        addMessage("Hi there! I need help with my course schedule.", true);
+        
+        setTimeout(function() {
+            addMessage("I can help you with course information. Which course are you inquiring about?", false);
+        }, 1500);
+    }, 3000);
+});
